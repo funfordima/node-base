@@ -1,25 +1,18 @@
 module.exports = {
   env: {
-    browser: true,
+    node: true,
     commonjs: true,
-    es2021: true,
+    es6: true,
   },
   parser: "@babel/eslint-parser",
   extends: ["plugin:prettier/recommended"],
-  overrides: [
-    {
-      env: {
-        node: true,
-      },
-      files: [".eslintrc.{js,cjs}"],
-      parserOptions: {
-        sourceType: "script",
-        requireConfigFile: false,
-      },
-    },
-  ],
+  globals: {
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly",
+  },
   parserOptions: {
-    ecmaVersion: "latest",
+    ecmaVersion: 2018,
+    requireConfigFile: false,
   },
   rules: {
     semi: [2, "always"],

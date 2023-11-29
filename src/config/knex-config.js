@@ -5,6 +5,6 @@ module.exports = require('knex')({
     port: process.env.DB_PORT,
     user: 'postgres',
     password: 'root',
-    database: 'pd_demo',
+    database: 'pg_demo',
   },
 });

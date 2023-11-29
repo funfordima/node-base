@@ -1,9 +1,9 @@
-require('dotenv').config();
-const pg = require('pg');
-const fs = require('fs');
-const path = require('path');
+require("dotenv").config();
+const pg = require("pg");
+const fs = require("fs");
+const path = require("path");
 
-const filePath = path.join(__dirname, 'pg_demo.sql');
+const filePath = path.join(__dirname, "pg_demo.sql");
 const sql = fs.readFileSync(filePath).toString();
 const config = {
   user: "postgres",
@@ -26,7 +26,7 @@ pool.connect((err, client, done) => {
 
     if (err) {
       console.error(err);
-  
+
       process.exit(1);
     }
 
