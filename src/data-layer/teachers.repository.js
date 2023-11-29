@@ -5,7 +5,6 @@ const TEACHERS_TABLE = 'teachers';
 module.exports = class TeachersRepository {
   async getTeachers() {
     try {
-      console.log(1);
       const teachers = await knex(TEACHERS_TABLE)
         .leftOuterJoin('subjects', 'teachers.subject_id', '=', 'subjects.id')
         .select(
@@ -15,7 +14,6 @@ module.exports = class TeachersRepository {
           'teachers.work_experience',
           'subjects.name as subject_name',
         );
-      console.log(teachers);
 
       if (!teachers.length) {
         throw 'Teachers list is empty';
@@ -47,6 +45,24 @@ module.exports = class TeachersRepository {
       return teacher[0];
     } catch (error) {
       throw error;
+    }
+  }
+
+  async addTeacher(fieldDto) {
+    const trx = await knex.transaction({ isolation: 'repeatable read' });
+
+    try {
+      const result = await knex(TEACHERS_TABLE)
+        .transacting(trx)
+        .insert(fieldDto)
+        .returning('id');
+      await trx.commit();
+
+      return result;
+    } catch (error) {
+      await trx.rollback();
+
+      throw 'Atomic error' + error;
     }
   }
 };

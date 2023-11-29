@@ -2,12 +2,20 @@ const TeacherRepository = require('../../data-layer/teachers.repository');
 const Teacher = require('../entities/teachers.entity');
 
 module.exports = class TeachersUseCase {
+  mapFields = {
+    id: 'id',
+    name: 'name',
+    work_experience: 'work_experience',
+    phone_number: 'phone_number',
+    subject_id: 'subject_id',
+    is_union_member: 'is_union_member',
+  };
+
   async getTeachers() {
     const teacherRepository = new TeacherRepository();
 
     try {
       const teachersDb = await teacherRepository.getTeachers();
-      console.log(teachersDb);
       const teachers = teachersDb.map(
         (teacherItem) => new Teacher(teacherItem),
       );
@@ -28,5 +36,43 @@ module.exports = class TeachersUseCase {
     } catch (error) {
       throw error;
     }
+  }
+
+  async addTeacher(data) {
+    const teacherRepository = new TeacherRepository();
+    const fields = data?.fields;
+
+    if (!Array.isArray(fields) && !fields?.length) {
+      throw 'There is no data for update';
+    }
+
+    const isStringChecked = this.checkStringFieldInsert(fields);
+
+    if (!isStringChecked) {
+      throw 'Wrong fields received';
+    }
+
+    try {
+      const teacherId = await teacherRepository.addTeacher(this.mapToFieldsDto(fields));
+
+      return teacherId;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  checkStringFieldInsert(fields) {
+    const keys = fields.map((field) => Object.entries(field)[0][0]);
+
+    return keys.every((key) => key in this.mapFields);
+  }
+
+  mapToFieldsDto(fields) {
+    return fields.reduce((acc, el) => {
+      const entriesEl = Object.entries(el);
+      acc[entriesEl[0][0]] = entriesEl[0][1];
+
+      return acc;
+    }, {});
   }
 };

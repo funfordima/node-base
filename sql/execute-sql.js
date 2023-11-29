@@ -1,14 +1,14 @@
-require("dotenv").config();
-const pg = require("pg");
-const fs = require("fs");
-const path = require("path");
+require('dotenv').config();
+const pg = require('pg');
+const fs = require('fs');
+const path = require('path');
 
-const filePath = path.join(__dirname, "pg_demo.sql");
+const filePath = path.join(__dirname, 'pg_demo.sql');
 const sql = fs.readFileSync(filePath).toString();
 const config = {
-  user: "postgres",
-  database: "pg_demo",
-  password: "root",
+  user: 'postgres',
+  database: 'pg_demo',
+  password: 'root',
   port: process.env.DB_PORT,
 };
 

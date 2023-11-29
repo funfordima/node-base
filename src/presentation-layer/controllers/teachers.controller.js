@@ -23,3 +23,19 @@ exports.getTeachers = async (req, res) => {
     return res.status(400).send(err);
   }
 };
+
+exports.addTeacher = async (req, res) => {
+  const teachersUseCase = new TeachersUseCase();
+
+  try {
+    const data = req.body;
+
+    if (data) {
+      const teacherId = await teachersUseCase.addTeacher(data);
+
+      return res.status(200).send(teacherId);
+    }
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+};
