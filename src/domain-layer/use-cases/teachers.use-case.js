@@ -42,7 +42,7 @@ module.exports = class TeachersUseCase {
     const teacherRepository = new TeacherRepository();
     const fields = data?.fields;
 
-    if (!Array.isArray(fields) && !fields?.length) {
+    if (!Array.isArray(fields) || !fields?.length) {
       throw 'There is no data for update';
     }
 
@@ -70,6 +70,39 @@ module.exports = class TeachersUseCase {
       const result = await teacherRepository.removeOneTeacher(id);
 
       return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateTeacher(data) {
+    const teacherRepository = new TeacherRepository();
+    const fields = data?.fields;
+
+    if (!Array.isArray(fields) || !fields?.length) {
+      throw 'Fields is not defined';
+    }
+
+    const itemId = fields.find((item) => item.id)?.id;
+
+    if (!itemId) {
+      throw "Filed 'id' is not defined";
+    }
+
+    const isStringChecked = this.checkStringFieldInsert(fields);
+
+    if (!isStringChecked) {
+      throw 'Wrong fields received';
+    }
+
+    try {
+      const result = await teacherRepository.updateOneTeacher(
+        itemId,
+        this.mapToFieldsDto(fields),
+      );
+      const updatedTeacher = new Teacher(result);
+
+      return updatedTeacher;
     } catch (error) {
       throw error;
     }

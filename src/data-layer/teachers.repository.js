@@ -82,4 +82,37 @@ module.exports = class TeachersRepository {
       throw error;
     }
   }
+
+  async updateOneTeacher(id, fields) {
+    try {
+      const updatedParams = { ...fields, updated_at: new Date() };
+      const result = await knex(TEACHERS_TABLE)
+        .where({ id })
+        .update(updatedParams)
+        .returning('*');
+
+      if (!result[0]?.id) {
+        throw `Teacher with id: ${id} not found`;
+      }
+
+      const updatedTeacher = await knex(TEACHERS_TABLE)
+        .innerJoin('subjects', 'teachers.subject_id', 'subjects.id')
+        .select(
+          'teachers.name as teacher_name',
+          'teachers.id',
+          'teachers.is_union_member',
+          'teachers.work_experience',
+          'subjects.name as subject_name',
+        )
+        .where({ 'teachers.id': result[0].id });
+
+      if (!updatedTeacher[0]) {
+        throw `Teacher with id: ${result[0].id} not found`;
+      }
+
+      return updatedTeacher[0];
+    } catch (error) {
+      throw error;
+    }
+  }
 };
