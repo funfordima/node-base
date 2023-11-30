@@ -53,9 +53,23 @@ module.exports = class TeachersUseCase {
     }
 
     try {
-      const teacherId = await teacherRepository.addTeacher(this.mapToFieldsDto(fields));
+      const teacherId = await teacherRepository.addTeacher(
+        this.mapToFieldsDto(fields),
+      );
 
       return teacherId;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removeTeacher(id) {
+    const teacherRepository = new TeacherRepository();
+
+    try {
+      const result = await teacherRepository.removeOneTeacher(id);
+
+      return result;
     } catch (error) {
       throw error;
     }

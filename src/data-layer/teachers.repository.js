@@ -65,4 +65,21 @@ module.exports = class TeachersRepository {
       throw 'Atomic error' + error;
     }
   }
+
+  async removeOneTeacher(id) {
+    try {
+      const teacherId = await knex(TEACHERS_TABLE)
+        .del()
+        .where({ id })
+        .returning('id');
+
+      if (!teacherId[0]) {
+        throw `Teacher with id: ${id} not found`;
+      }
+
+      return teacherId;
+    } catch (error) {
+      throw error;
+    }
+  }
 };

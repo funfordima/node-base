@@ -39,3 +39,18 @@ exports.addTeacher = async (req, res) => {
     return res.status(400).send(error);
   }
 };
+
+exports.removeTeacher = async (req, res) => {
+  const teachersUseCase = new TeachersUseCase();
+  if (req?.query?.id) {
+    const id = req.query.id;
+
+    try {
+      const teacherId = await teachersUseCase.removeTeacher(id);
+
+      return res.status(200).send(teacherId);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  }
+};
