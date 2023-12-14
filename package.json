@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:server-guide": "node server.js --db_path=route_guide_db.json",
-    "start:client-guide": "node route_guide_client.js --db_path=route_guide_db.json"
+    "download": "node index.js",
+    "generate": "protoc --js_out=import_style=commonjs,binary:. prices.proto",
+    "protobuf": "node protoc.js",
+    "start:server": "node grpc-server.js",
+    "start:client": "node grpc-client.js"
   },
   "keywords": [],
   "author": "Dmytro Litvinov<d.g.litvinov@gmail.com>",
@@ -13,9 +16,9 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.9.13",
     "@grpc/proto-loader": "^0.7.10",
-    "async": "^3.2.5",
-    "google-protobuf": "^3.21.2",
-    "lodash": "^4.17.21",
-    "minimist": "^1.2.8"
+    "google-protobuf": "^3.21.2"
+  },
+  "devDependencies": {
+    "protoc-gen-js": "^3.21.2"
   }
 }
