@@ -1,10 +1,14 @@
 {
   "name": "base",
   "version": "1.0.0",
-  "description": "",
+  "description": "Nodejs file manager app",
+  "type": "module",
+  "engines" : { 
+    "node" : ">=20.11.0"
+  },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "Dmytro Litvinov<d.g.litvinov@gmail.com>",

@@ -1,0 +1,1 @@
+export const commandList = ['up', 'ls', 'cat', 'add', 'rn', 'cp', 'mv', 'rm', 'os', 'hash', 'compress ', 'decompress '];
