@@ -1,6 +1,14 @@
 import path from 'node:path';
 
 import { logDir } from '../utils/log-dir.util.js';
+import { validatePath } from '../utils/validate-path.util.js';
+import { changeDir } from '../utils/change-dir.util.js';
+import { readDir } from '../utils/read-dir.util.js';
+import { readFile } from '../utils/read-file.util.js';
+import { addFile } from '../utils/add-file.util.js';
+import { renameFile } from '../utils/rename-file.util.js';
+import { copyFile } from '../utils/copy-file.util.js';
+import { deleteFile } from '../utils/delete-file.util.js';
 
 export class FileManager {
   constructor() {
@@ -21,42 +29,60 @@ export class FileManager {
     }
 
     const newPath = path.join(currentDirectory, '..');
-    process.chdir(newPath);
+
+    changeDir(newPath);
     logDir();
   }
 
-  cd() {
+  cd(...args) {
+    const targetPath = validatePath(args);
+    const currentDirectory = process.cwd();
+    const rootDir = path.parse(currentDirectory).root;
+    const targetRootDir = path.parse(targetPath).root;
 
+    if (targetRootDir !== rootDir) {
+      logDir();
+      return;
+    }
 
+    changeDir(targetPath);
+    logDir();
   }
 
-  ls() {
-
-
+  async ls() {
+    await readDir();
+    logDir();
   }
 
-  cat() {
-
+  async cat(...pathToFile) {
+    await readFile(pathToFile);
+    logDir();
   }
 
-  add() {
-
+  async add(fileName) {
+    await addFile(fileName);
+    logDir();
   }
 
-  rn() {
-
+  async rn(filePath, fileName) {
+    await renameFile(filePath, fileName);
+    logDir();
   }
 
-  cp() {
-
+  async cp(filePath, dirPath) {
+    await copyFile(filePath, dirPath);
+    logDir();
   }
 
-  mv() {
-
+  async mv(filePath, dirPath) {
+    await copyFile(filePath, dirPath);
+    await deleteFile(filePath);
+    logDir();
   }
 
-  rm() {
-
+  async rm(filePath) {
+    await deleteFile(filePath);
+    logDir();
   }
 
   os() {

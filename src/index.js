@@ -2,10 +2,9 @@ import readline from 'node:readline';
 import os from 'node:os';
 
 import { getUserName } from './utils/get-user-name.util.js';
-import { logDir } from './utils/log-dir.util.js';
-import { CustomValidationError } from './errors/custom-validation-error.js';
 import { validateInput } from './utils/validate-input.util.js';
 import { FileManager } from './file-manager/file-manager.js';
+import { changeDir } from './utils/change-dir.util.js';
 
 const initApp = () => {
   const rl = readline.createInterface({
@@ -15,11 +14,7 @@ const initApp = () => {
   }); 
   const userName = getUserName();
 
-  try {
-    process.chdir(os.homedir());
-  } catch (error) {
-    new CustomValidationError();
-  }
+  changeDir(os.homedir());
 
   rl.question(`\x1b[33m%s\x1b[0m Welcome to the File Manager, ${userName}! \n \x1b[2m You are currently in ${process.cwd()} \n\x1b[0m`, (input) => {
     if (input === '.exit') {
@@ -39,8 +34,8 @@ const initApp = () => {
     }
 
     const { method, params } = validateInput(input);
-    
-    logDir();
+    console.log(1);
+    // logDir();
 
     new FileManager()[method](...params);
   }); 
@@ -48,7 +43,7 @@ const initApp = () => {
   rl.on('SIGINT', () => rl.close());
 
   rl.on('close', () => {
-    console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
+    console.log('\x1b[32m', `Thank you for using File Manager, ${userName}, goodbye!`, '\x1b[0m');
     process.exit(0);
   });
 };
