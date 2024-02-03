@@ -1,7 +1,1 @@
-import os from 'node:os';
-
-export const logDir = () => {
-  const currentDirectory = os.homedir();
- 
-  console.log('\x1b[2m', `You are currently in ${currentDirectory} \n`);
-};
+export const logDir = () => console.log('\x1b[2m', `You are currently in ${process.cwd()} \n\x1b[0m`);

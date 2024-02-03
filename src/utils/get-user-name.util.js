@@ -4,7 +4,7 @@ export const getUserName = () => {
   const userName = argList.find((arg) => arg.startsWith(entryString))?.split('=')?.[1];
 
   if (!userName) {
-    process.stdout.write('Invalid input. \n');
+    console.log('\x1b[31m', 'Invalid input. \n\x1b[0m');
   }
 
   return userName;
