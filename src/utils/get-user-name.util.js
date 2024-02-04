@@ -5,6 +5,7 @@ export const getUserName = () => {
 
   if (!userName) {
     console.log('\x1b[31m', 'Invalid input. \n\x1b[0m');
+    return;
   }
 
   return userName;

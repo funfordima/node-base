@@ -8,13 +8,14 @@ export const readFile = async (pathToFile) => {
   const isSourceFileExists = await checkFileExists(sourcePath);
 
   if (!isSourceFileExists) {
-    console.log('Operation failed\r\n');
+    console.log('Operation failed');
+    return;
   }
 
   await new Promise((res, rej) => {
     const sourceStream = createReadStream(sourcePath, { encoding: 'utf8' });
 
-    console.log('\x1b[36m%s\x1b[0m', 'File content:\n');
+    console.log('\x1b[36m%s\x1b[0m', 'File content:');
 
     sourceStream.on('data', (chunk) => {
       console.log(chunk);

@@ -10,12 +10,13 @@ export const copyFile = async (filePath, dirPath) => {
   const isSourceFileExists = await checkFileExists(sourcePath);
 
   if (!isSourceFileExists) {
-    console.log('\x1b[31m', 'Operation failed\r\n', '\x1b[0m');
+    console.log('\x1b[31m', 'Operation failed', '\x1b[0m');
+    return;
   }
 
   try {
     await promises.cp(sourcePath, destinationPath);
   } catch (err) {
-    console.log('\x1b[31m', 'Operation failed\r\n', '\x1b[0m');
+    console.log('\x1b[31m', 'Operation failed', '\x1b[0m');
   } 
 };

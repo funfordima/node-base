@@ -10,12 +10,13 @@ export const renameFile = async (filePath, fileName) => {
   const isSourceFileExists = await checkFileExists(sourcePath);
 
   if (!isSourceFileExists) {
-    console.log('\x1b[31m', 'Operation failed\r\n', '\x1b[0m');
+    console.log('\x1b[31m', 'Operation failed', '\x1b[0m');
+    return;
   }
 
   try {
     await promises.rename(sourcePath, destinationPath);
   } catch (error) {
-    console.log('\x1b[31m', 'Operation failed\r\n', '\x1b[0m');
+    console.log('\x1b[31m', 'Operation failed', '\x1b[0m');
   }
 };

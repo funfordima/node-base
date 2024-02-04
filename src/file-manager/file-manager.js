@@ -10,6 +10,7 @@ import { renameFile } from '../utils/rename-file.util.js';
 import { copyFile } from '../utils/copy-file.util.js';
 import { deleteFile } from '../utils/delete-file.util.js';
 import { osOperations } from '../utils/os-operations.util.js';
+import { hashFile } from '../utils/hash-file.util.js';
 
 export class FileManager {
   constructor() {
@@ -91,8 +92,9 @@ export class FileManager {
     logDir();
   }
 
-  hash() {
-
+  async hash(filePath) {
+    await hashFile(filePath);
+    logDir();
   }
 
   compress() {

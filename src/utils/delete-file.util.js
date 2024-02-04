@@ -9,6 +9,6 @@ export const deleteFile = async (filePath) => {
   try {
     await promises.rm(sourcePath);
   } catch (error) {
-    console.log('\x1b[31m', 'Operation failed\r\n', '\x1b[0m');
+    console.log('\x1b[31m', 'Operation failed', '\x1b[0m');
   }
 };
