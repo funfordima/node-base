@@ -11,6 +11,8 @@ import { copyFile } from '../utils/copy-file.util.js';
 import { deleteFile } from '../utils/delete-file.util.js';
 import { osOperations } from '../utils/os-operations.util.js';
 import { hashFile } from '../utils/hash-file.util.js';
+import { compressFile } from '../utils/compress-file.util.js';
+import { decompressFile } from '../utils/decompress-file.util.js';
 
 export class FileManager {
   constructor() {
@@ -97,11 +99,13 @@ export class FileManager {
     logDir();
   }
 
-  compress() {
-
+  async compress(filePath, destinationPath) {
+    await compressFile(filePath, destinationPath);
+    logDir();
   }
 
-  decompress() {
-
+  async decompress(filePath, destinationPath) {
+    await decompressFile(filePath, destinationPath);
+    logDir();
   }
 }
