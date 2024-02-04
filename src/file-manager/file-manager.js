@@ -9,6 +9,7 @@ import { addFile } from '../utils/add-file.util.js';
 import { renameFile } from '../utils/rename-file.util.js';
 import { copyFile } from '../utils/copy-file.util.js';
 import { deleteFile } from '../utils/delete-file.util.js';
+import { osOperations } from '../utils/os-operations.util.js';
 
 export class FileManager {
   constructor() {
@@ -85,8 +86,9 @@ export class FileManager {
     logDir();
   }
 
-  os() {
-
+  os(operation) {
+    osOperations(operation);
+    logDir();
   }
 
   hash() {

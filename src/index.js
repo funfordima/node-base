@@ -34,8 +34,6 @@ const initApp = () => {
     }
 
     const { method, params } = validateInput(input);
-    console.log(1);
-    // logDir();
 
     new FileManager()[method](...params);
   }); 
