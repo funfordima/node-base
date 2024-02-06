@@ -1,17 +1,33 @@
 // Uncomment the code below and write your tests
-/* import {  simpleCalculator, Action } from './index';
-
-const testCases = [
-    { a: 1, b: 2, action: Action.Add, expected: 3 },
-    { a: 2, b: 2, action: Action.Add, expected: 4 },
-    { a: 3, b: 2, action: Action.Add, expected: 5 },
-    // continue cases for other actions    
-]; */
+import { simpleCalculator, Action } from './index';
 
 describe('simpleCalculator', () => {
-  // This test case is just to run this test suite, remove it when you write your own tests
-  test('should blah-blah', () => {
-    expect(true).toBe(true);
+  test.each`
+    a            | b    | action                | expected | description
+    ${-6}        | ${2} | ${Action.Add}         | ${-4}    | ${'should add two numbers'} 
+    ${0}         | ${2} | ${Action.Add}         | ${2}     | ${'should add two numbers'}  
+    ${6}         | ${2} | ${Action.Add}         | ${8}     | ${'should add two numbers'}  
+    ${-6}        | ${2} | ${Action.Subtract}    | ${-8}    | ${'should subtract two numbers'} 
+    ${0}         | ${2} | ${Action.Subtract}    | ${-2}    | ${'should subtract two numbers'}  
+    ${6}         | ${2} | ${Action.Subtract}    | ${4}     | ${'should subtract two numbers'}  
+    ${-6}        | ${2} | ${Action.Multiply}    | ${-12}   | ${'should multiply two numbers'} 
+    ${0}         | ${2} | ${Action.Multiply}    | ${0}     | ${'should multiply two numbers'}  
+    ${6}         | ${2} | ${Action.Multiply}    | ${12}    | ${'should multiply two numbers'}  
+    ${-6}        | ${2} | ${Action.Divide}      | ${-3}    | ${'should divide two numbers'} 
+    ${0}         | ${2} | ${Action.Divide}      | ${0}     | ${'should divide two numbers'}  
+    ${6}         | ${2} | ${Action.Divide}      | ${3}     | ${'should divide two numbers'}  
+    ${-6}        | ${2} | ${Action.Exponentiate}| ${36}    | ${'should exponentiate two numbers'} 
+    ${0}         | ${2} | ${Action.Exponentiate}| ${0}     | ${'should exponentiate two numbers'}  
+    ${6}         | ${2} | ${Action.Exponentiate}| ${36}    | ${'should exponentiate two numbers'}  
+    ${0}         | ${2} | ${''}                 | ${null}  | ${'should return null for invalid action'}  
+    ${6}         | ${2} | ${'Invalid action'}   | ${null}  | ${'should return null for invalid action'}
+    ${BigInt(1)} | ${2} | ${Action.Add}         | ${null}  | ${'should return null for out of range arguments'} 
+    ${'3'}       | ${2} | ${Action.Add}         | ${null}  | ${'should return null for out of range arguments'}  
+    ${null}      | ${2} | ${Action.Add}         | ${null}  | ${'should return null for out of range arguments'}  
+    ${undefined} | ${2} | ${Action.Add}         | ${null}  | ${'should return null for out of range arguments'} 
+    ${{}}        | ${2} | ${Action.Add}         | ${null}  | ${'should return null for out of range arguments'}  
+    ${[]}        | ${2} | ${Action.Add}         | ${null}  | ${'should return null for out of range arguments'}  
+  `('$description', ({a, b, action, expected}) => {
+    expect(simpleCalculator({ a, b, action: action })).toBe(expected);
   });
-  // Consider to use Jest table tests API to test all cases above
 });
