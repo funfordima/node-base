@@ -8,6 +8,7 @@
   "scripts": {
     "start:prod": "tsc --build --clean && tsc && nodemon dist/index.js",
     "start:dev": "nodemon src/index.ts",
+    "start:multi": "node --loader ts-node/esm ./src/framework/cluster.ts",
     "start": "node --loader ts-node/esm ./src/index.ts",
     "watch": "nodemon --watch ./src/",
     "lint": "eslint ./src",
