@@ -30,5 +30,7 @@ export class UserRouter {
 
   put(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {}
 
-  delete(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {}
+  delete(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {
+    this.request(MethodsEnum.DELETE, path, handler);
+  }
 }
