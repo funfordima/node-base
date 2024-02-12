@@ -65,11 +65,14 @@ class Application {
 
         this.middleWares.forEach((middleware) => middleware(req, res as any));
         const emitted = this.emitter.emit(this.getRouterMask(req.url!, req.method as MethodsEnum), req, res);
-
+        console.log(emitted);
+        
+        
         if (!emitted) {
           res.writeHead(404, {
             'Content-type': 'application/json'
           });
+
           res.end(JSON.stringify({
             message: `Requested page ${req.url} doesn't exist`,
           }));

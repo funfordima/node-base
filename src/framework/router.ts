@@ -20,7 +20,9 @@ export class UserRouter {
     endpoint[method] = handler;
   }
 
-  get(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {}
+  get(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {
+    this.request(MethodsEnum.GET, path, handler);
+  }
 
   post(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {
     this.request(MethodsEnum.POST, path, handler);
