@@ -28,7 +28,9 @@ export class UserRouter {
     this.request(MethodsEnum.POST, path, handler);
   }
 
-  put(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {}
+  put(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {
+    this.request(MethodsEnum.PUT, path, handler);
+  }
 
   delete(path: string, handler: (req: CustomClientRequest, res: CustomServerResponse) => unknown) {
     this.request(MethodsEnum.DELETE, path, handler);
