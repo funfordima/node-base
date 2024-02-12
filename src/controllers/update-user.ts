@@ -27,6 +27,15 @@ export const updateUser = (users: User[]) => (req: CustomClientRequest, res: Cus
 
       const newData = req.body;
       const updatedUser = new User({ ...user, ...newData });
+      const { username, age } = updatedUser;
+      const hasValidUserNameType = typeof username === 'string';
+      const hasValidAgeType = typeof age === 'number';
+
+      if (!username || !age || !hasValidUserNameType || !hasValidAgeType) {
+        handleBadRequest(res);
+        return;
+      }
+      
       const userIndex = users.findIndex(({ id }) => id === requestId);
 
       users[userIndex] = updatedUser;
