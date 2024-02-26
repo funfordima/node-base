@@ -1,8 +1,9 @@
+import { EWsCommand } from 'src/constants/ws-command.enum';
 import { Instruction } from './instruction.model';
 
 export class InstructionDto<T> extends Instruction<T> {
-  constructor() {
-    super();
+  constructor(type: EWsCommand, data: T) {
+    super({ type, data });
   }
 
   mapDataToJson(): Instruction<string> {
