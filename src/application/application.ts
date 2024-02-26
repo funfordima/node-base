@@ -33,6 +33,7 @@ export class Application {
       }
 
       case EWsCommand.CREATE_ROOM: {
+        this.createRoom(clientId);
         break;
       }
 
@@ -57,6 +58,11 @@ export class Application {
   reg(connectionId: number, user: IUserReg) {
     const response = this.dbController?.reg(connectionId, user);
     
+    this.wsServer?.send(connectionId, JSON.stringify(response));
+  }
+
+  createRoom(connectionId: number) {
+    const response = this.dbController?.createRoom(connectionId);
     this.wsServer?.send(connectionId, JSON.stringify(response));
   }
 }
