@@ -3,7 +3,7 @@ import { GraphQLBoolean, GraphQLList, GraphQLObjectType, GraphQLSchema, graphql 
 import { ResolveTree, parseResolveInfo, simplifyParsedResolveInfoFragmentWithType } from 'graphql-parse-resolve-info';
 
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { MemberType, ProfileType, PostType, UserType, CreateUserInput, MemberTypeIdType, CreateProfileInput, CreatePostInput } from './types/types.js';
+import { MemberType, ProfileType, PostType, UserType, CreateUserInput, MemberTypeIdType, CreateProfileInput, CreatePostInput, ChangePostInput, ChangeProfileInput, ChangeUserInput } from './types/types.js';
 import { memberLoader, postLoader, profileLoader, subscribedToUserLoader, userSubscribedToLoader } from './loader.js';
 import { UUIDType } from './types/uuid.js';
 
@@ -176,6 +176,17 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
             },
           },
 
+          changeUser: {
+            type: UserType,
+            args: {
+              id: { type: UUIDType },
+              dto: { type: ChangeUserInput },
+            },
+            resolve: async (parent, { id, dto }) => {
+              return await prisma.user.update({ where: { id }, data: dto });
+            },
+          },
+
           createProfile: {
             type: ProfileType,
             args: {
@@ -209,6 +220,17 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
             },
           },
 
+          changeProfile: {
+            type: ProfileType,
+            args: {
+              id: { type: UUIDType },
+              dto: { type: ChangeProfileInput },
+            },
+            resolve: async (parent, { id, dto }) => {
+              return await prisma.profile.update({ where: { id }, data: dto });
+            },
+          },
+
           createPost: {
             type: PostType,
             args: {
@@ -232,6 +254,17 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 
                 return false;
               }
+            },
+          },
+
+          changePost: {
+            type: PostType,
+            args: {
+              id: { type: UUIDType },
+              dto: { type: ChangePostInput },
+            },
+            resolve: async (parent, { id, dto }) => {
+              return await prisma.post.update({ where: { id }, data: dto });
             },
           },
         },
