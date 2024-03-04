@@ -1,11 +1,12 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { GraphQLBoolean, GraphQLList, GraphQLObjectType, GraphQLSchema, graphql } from 'graphql';
+import { GraphQLBoolean, GraphQLList, GraphQLObjectType, GraphQLSchema, graphql, parse, validate } from 'graphql';
 import { ResolveTree, parseResolveInfo, simplifyParsedResolveInfoFragmentWithType } from 'graphql-parse-resolve-info';
 
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
 import { MemberType, ProfileType, PostType, UserType, CreateUserInput, MemberTypeIdType, CreateProfileInput, CreatePostInput, ChangePostInput, ChangeProfileInput, ChangeUserInput } from './types/types.js';
 import { memberLoader, postLoader, profileLoader, subscribedToUserLoader, userSubscribedToLoader } from './loader.js';
 import { UUIDType } from './types/uuid.js';
+import depthLimit from 'graphql-depth-limit';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { prisma } = fastify;
@@ -267,6 +268,37 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
               return await prisma.post.update({ where: { id }, data: dto });
             },
           },
+
+          subscribeTo: {
+            type: UserType,
+            args: {
+              authorId: { type: UUIDType },
+              userId: { type: UUIDType },
+            },
+            resolve: async (parents, { userId, authorId }) => {
+              await prisma.subscribersOnAuthors.create({
+                data: { subscriberId: userId, authorId: authorId },
+              });
+              return await prisma.user.findFirst({ where: { id: userId } });
+            },
+          },
+
+          unsubscribeFrom: {
+            type: GraphQLBoolean,
+            args: {
+              userId: { type: UUIDType },
+              authorId: { type: UUIDType },
+            },
+            resolve: async (parent, { userId, authorId }) => {
+              try {
+                await prisma.subscribersOnAuthors.deleteMany({ where: { subscriberId: userId, authorId: authorId } });
+                return true;
+              } catch (error) {
+                console.log(error);
+                return false;
+              }
+            },
+          },
         },
       });
 
@@ -292,6 +324,12 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         },
       });
 
+      const depthLimitValidation = validate(schema, parse(req.body.query), [depthLimit(5)]);
+
+      if (depthLimitValidation?.length) {
+        return { data: '', errors: depthLimitValidation };
+      }
+      
       return { data: result.data, errors: result.errors };
     },
   });
