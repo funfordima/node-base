@@ -4,7 +4,7 @@ import { ResolveTree, parseResolveInfo, simplifyParsedResolveInfoFragmentWithTyp
 
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
 import { MemberType, ProfileType, PostType, UserType, CreateUserInput, MemberTypeIdType } from './types/types.js';
-import { memberLoader, profileLoader } from './loader.js';
+import { memberLoader, postLoader, profileLoader } from './loader.js';
 import { UUIDType } from './types/uuid.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -169,6 +169,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           loaders: {
             memberLoader: memberLoader(prisma),
             profileLoader: profileLoader(prisma),
+            postLoader: postLoader(prisma),
           },
           data: {},
           prisma: prisma,
