@@ -1,9 +1,9 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { GraphQLList, GraphQLObjectType, GraphQLSchema, graphql } from 'graphql';
+import { GraphQLBoolean, GraphQLList, GraphQLObjectType, GraphQLSchema, graphql } from 'graphql';
 import { ResolveTree, parseResolveInfo, simplifyParsedResolveInfoFragmentWithType } from 'graphql-parse-resolve-info';
 
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { MemberType, ProfileType, PostType, UserType, CreateUserInput, MemberTypeIdType } from './types/types.js';
+import { MemberType, ProfileType, PostType, UserType, CreateUserInput, MemberTypeIdType, CreateProfileInput, CreatePostInput } from './types/types.js';
 import { memberLoader, postLoader, profileLoader, subscribedToUserLoader, userSubscribedToLoader } from './loader.js';
 import { UUIDType } from './types/uuid.js';
 
@@ -118,7 +118,8 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
             args: { id: { type: UUIDType } },
             resolve: async (parent, { id }) => {
               return await prisma.user.findFirst({
-                where: { id: id } });
+                where: { id: id }
+              });
             },
           },
 
@@ -126,7 +127,8 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
             type: PostType,
             args: { id: { type: UUIDType } },
             resolve: async (parent, { id }) => {
-              return await prisma.post.findFirst({ where: { id: id },
+              return await prisma.post.findFirst({
+                where: { id: id },
               });
             },
           },
@@ -151,6 +153,85 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
             },
             resolve: async (parent, { dto }) => {
               return prisma.user.create({ data: dto });
+            },
+          },
+
+          deleteUser: {
+            type: GraphQLBoolean,
+            args: {
+              id: { type: UUIDType },
+            },
+            resolve: async (parent, { id }) => {
+              try {
+                await prisma.user.delete({
+                  where: { id }
+                });
+
+                return true;
+              } catch (error) {
+                console.log(error);
+
+                return false;
+              }
+            },
+          },
+
+          createProfile: {
+            type: ProfileType,
+            args: {
+              dto: { type: CreateProfileInput },
+            },
+
+            resolve: async (parents, { dto }) => {
+              try {
+                return prisma.profile.create({ data: dto });
+              } catch (error) {
+                console.log(error);
+              }
+            },
+          },
+
+          deleteProfile: {
+            type: GraphQLBoolean,
+            args: { id: { type: UUIDType } },
+            resolve: async (parent, { id }) => {
+              try {
+                await prisma.profile.delete({
+                  where: { id },
+                });
+
+                return true;
+              } catch (error) {
+                console.log(error);
+
+                return false;
+              }
+            },
+          },
+
+          createPost: {
+            type: PostType,
+            args: {
+              dto: { type: CreatePostInput },
+            },
+            resolve: async (parent, { dto }) => {
+              return prisma.post.create({ data: dto });
+            },
+          },
+
+          deletePost: {
+            type: GraphQLBoolean,
+            args: { id: { type: UUIDType } },
+            resolve: async (parent, { id }) => {
+              try {
+                await prisma.post.delete({ where: { id } });
+
+                return true;
+              } catch (error) {
+                console.log(error);
+
+                return false;
+              }
             },
           },
         },
